@@ -1,0 +1,37 @@
+﻿body 
+{
+  background-color: #696969;
+  font-family: sans-serif;
+  color: white;
+  text-align: center;
+}
+
+select
+{
+  list-style-type: none;
+  max-width: 300px;
+  margin: 20px auto;
+}
+
+ul 
+{
+  list-style-type: none;
+  max-width: 300px;
+  margin: 20px auto;
+}
+
+li 
+{
+  min-height: 20px;
+  text-align: left;
+  background-color: beige;
+  color: black;
+  padding: 5px;
+  margin-bottom: 5px
+}
+
+li button 
+{
+  float: right;
+  margin: 0px,1px
+}

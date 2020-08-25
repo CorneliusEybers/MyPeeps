@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>My Peeps</title>
+  <link href="css/site.css" rel="stylesheet" />
+  <script src="lib/jquery/jquery.js"></script>
+  <script src="Scripts/app.js"></script>
+</head>
+<body>
+
+  <div>
+    <h1>My Peeps</h1>
+  </div>
+
+  <div id="divmain">
+    <div>
+      <h2 style="display: inline-block">Phone Book</h2>
+      <button onclick="ShowPhoneBooks()">A</button>
+    </div>
+    <div>
+      <select id="phonebookselection" onchange="ContactsShowPerPhoneBook()">
+        
+      </select>
+    </div>
+  </div>
+
+  <div id="divphonebook" style="display: none">
+    <div>
+      <h2 style="display: inline-block">Phone Book</h2>
+      <button id="btnphonebookback" onclick="ShowContacts()">B</button>
+    </div>
+    <div>
+      <input id="phonebookname" type="text" placeholder="Phone Book" />
+      <button id="btnphonebookfind" onclick="PhoneBookFind()">F</button>
+      <button id="btnphonebooksave" onclick="PhoneBookSave(-1)">S</button>
+    </div>
+    <div>
+      <ul id="phonebooks">
+        
+      </ul>
+    </div>
+  </div>
+
+  <div id="divcontacts">
+    <div>
+      <h2 style="display: inline-block">Contact</h2>
+    </div>
+    <div>
+      <div style="display: inline-block">
+        <div>
+          <input id="contactname" type="text" placeholder="Name" />
+        </div>
+        <div>
+          <input id="contactnumber" type="text" placeholder="Number" />
+        </div>
+      </div>
+      <button id="btncontactfind" onclick="ContactFind()">F</button>
+      <button id="btncontactsave" onclick="ContactSave(-1)">S</button>
+    </div>
+    <div>
+      <ul id="contacts">
+        
+      </ul>
+    </div>
+  </div>
+
+<div id="footer">
+    <div id="message" style="display: none;">
+
+    </div>
+  </div>
+
+</body>
+</html>
