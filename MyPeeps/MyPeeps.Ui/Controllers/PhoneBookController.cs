@@ -50,7 +50,6 @@ namespace MyPeeps.Ui.Controllers
       return Ok(result);
     }
 
-    //PhoneBook phoneBook
     [HttpPost]
     [Route("PhoneBook/PostPhoneBook")]
     public IActionResult PostPhoneBook(PhoneBook phoneBook)
@@ -67,6 +66,15 @@ namespace MyPeeps.Ui.Controllers
       }
 
       return Ok(success);
+    }
+
+    [HttpDelete]
+    [Route("PhoneBook/DeletePhoneBook/{phoneBookId}")]
+    public IActionResult DeletePhoneBook(int phoneBookId)
+    {
+      var contactUndo = mc_PhoneBookRespository.DeletePhoneBook(phoneBookId);
+      
+      return Ok(contactUndo);
     }
 
     #endregion

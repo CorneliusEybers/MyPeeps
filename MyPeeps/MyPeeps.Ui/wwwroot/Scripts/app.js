@@ -15,12 +15,15 @@
 // - Global
 var CurrentPhoneBooks = [];   // - List of all available Phone Books
 var CurrentPhoneBook = {};    // - Details of the Currently selected Phone Book
+var UndoDeletePhoneBook = {}; // - When a phonebook is deleted, keep a copy here for undo.
 var PageUrl = {};             // - Object contains all URL parts that need.
 
 // - JQuery Events
-$(document).ready(PageLoad());// - I know about dynamic functions and how they work
+$(document).ready(PageLoad());
+// - I know about dynamic functions and how they work
 // - When I can I prefer to use function for the sake of 
 //   readability
+
 // - Functions Main
 function PageLoad() 
 {
@@ -155,10 +158,9 @@ function GetPhoneBooks()
 }
 
 function PostPhoneBook(phoneBook)
-{ 
+{
   // - WebServer Call to save the PhoneBook
-  // - Update of insert handled together
-  console.info(phoneBook);
+  // - Update and Insert handled together
   $.ajax(
     {
       type: "POST",
@@ -183,6 +185,31 @@ function PostPhoneBook(phoneBook)
   GetPhoneBook();
   GetPhoneBooks();
 
+}
+
+function DeletePhoneBook(phoneBookId) 
+{
+  // - Delete it server side...
+  // - ToDo: Implement Undo Delete.
+  console.info("phoneBookId: " + phoneBookId);
+  $.ajax(
+    {
+      type: "DELETE",
+      dataType: "json",
+      url:"PhoneBook/DeletePhoneBook/" + phoneBookId,
+      data: phoneBookId,
+      success: function(result) 
+      {
+        UndoDeletePhoneBook = result;
+        console.info("Undo Delete Phone placed in local variable for undo...");
+        console.info(result);
+        console.info(UndoDeletePhoneBook);
+      },
+      error: function() 
+      {
+        console.error("Error in function DeletePhoneBook...");
+      }
+    });
 }
 
 // - Functions PhoneBook
@@ -264,14 +291,30 @@ function PhoneBookDelete(phoneBookIndex)
   // - As a form of Undo, place the deleted into the 
   //   capture area. If user wants to save it again
   //   he/she can just save...
+  // - ToDo: Improve to work with object in order to preserve contacts...
   $("#phonebookname").val(CurrentPhoneBooks[phoneBookIndex].name);
   $("#btnphonebooksave").attr("onclick", "PhoneBookSave(-1)");
+
+  // - What if we are deleting the current PhoneBook?
+  if (CurrentPhoneBook.phoneBookId == CurrentPhoneBooks[phoneBookIndex].phoneBookId) 
+  {
+    CurrentPhoneBook.phoneBookId = -1;
+    CurrentPhoneBook.name = "";
+    CurrentPhoneBook.contacts = [];
+
+    ContactsDraw();
+  }
+
+  // - Pass the PhoneBook for a silent delete on the database
+  // - No refresh required.
+  DeletePhoneBook(CurrentPhoneBooks[phoneBookIndex].phoneBookId);
 
   // - Remove the PhoneBook from the PhoneBooks
   CurrentPhoneBooks.splice(phoneBookIndex, 1);
 
   // - Refresh
   PhoneBooksDraw("");
+  PhoneBooksDrawSelection();
 
   // - Look Sharp
   $("#phonebookname").focus();

@@ -130,7 +130,30 @@ namespace MyPeeps.Ui.Repositories
     /// </returns>
     public PhoneBook DeletePhoneBook(int phoneBookId)
     {
-      throw new System.NotImplementedException();
+      var phoneBook = mc_PhoneBooks.First(PhnBok => PhnBok.PhoneBookId == phoneBookId);
+      
+      var phoneBookUndo = new PhoneBook()
+                          {
+                            PhoneBookId = -1,
+                            Name = phoneBook.Name
+                          };
+
+      // - Create new instances do not work with deleted references
+      foreach (var contact in phoneBook.Contacts)
+      {
+        var contactUndo = new Contact()
+                          {
+                            ContactId = -1,
+                            Name = contact.Name,
+                            Number = contact.Number
+                          };
+
+        phoneBookUndo.Contacts.Add(contactUndo);
+      }
+
+      mc_PhoneBooks.Remove(phoneBook);
+
+      return phoneBookUndo;
     }
 
     #endregion
