@@ -1,5 +1,7 @@
 // - Required Assemblies
 
+using System.Collections.Generic;
+using Castle.Components.DictionaryAdapter;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -85,13 +87,31 @@ namespace MyPeeps.Ui.Tests
     public void GetPhoneBook_NoContacts()
     {
       // - Given
-      //var resources = new Resources();
+      var resources = new Resources(true);
+      int phoneBookId = 4;
 
-      //resources.PhoneBookRepository;
+      // - Setup the Moq Data that will be returned
+      PhoneBook phoneBookNoContacts = new PhoneBook()
+                                      {
+                                        PhoneBookId = phoneBookId,
+                                        Name = "NoContactPhoneBook",
+                                        Contacts = new EditableList<Contact>()
+                                      };
+
+      // - Setup the Moq Repository
+      resources.PhoneBookRepositoryMoq.Setup(Rsp => Rsp.ReadPhoneBook(phoneBookId)).Returns(phoneBookNoContacts);
 
       // - When
+      var result = resources.Controller.GetPhoneBook(phoneBookId) as OkObjectResult;
 
       // - Then
+      Assert.IsNotNull(result);
+      Assert.AreEqual(200, result.StatusCode);
+
+      var phoneBookGot = result.Value as PhoneBook;
+      Assert.AreEqual(phoneBookNoContacts.PhoneBookId,phoneBookGot.PhoneBookId);
+      Assert.AreEqual(phoneBookNoContacts.Name,phoneBookGot.Name);
+      Assert.AreEqual(0, phoneBookGot.Contacts.Count);
     }
   }
 }
