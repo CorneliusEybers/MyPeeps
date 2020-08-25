@@ -207,7 +207,6 @@ function DeleteContact(contactId)
 {
   // - Delete server-side...
   // - ToDo: Implement Undo Delete.
-  console.info(contactId);
   $.ajax(
     {
       type: "DELETE",
@@ -217,9 +216,6 @@ function DeleteContact(contactId)
       {
         UndoDeleteContact = result;
         console.info("Undo Delete Contact placed in local variable for undo...");
-
-        console.info(result);
-        console.info(UndoDeleteContact);
       },
       error: function() 
       {
