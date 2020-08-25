@@ -113,5 +113,45 @@ namespace MyPeeps.Ui.Tests
       Assert.AreEqual(phoneBookNoContacts.Name,phoneBookGot.Name);
       Assert.AreEqual(0, phoneBookGot.Contacts.Count);
     }
+
+    [TestMethod]
+    public void GetPhoneBook_DoesNotExist()
+    {
+      // - Given
+      var resources = new Resources(false);
+
+      int phoneBookIdNotExist = 25;
+
+      // - When
+      var result = resources.Controller.GetPhoneBook(phoneBookIdNotExist) as NotFoundResult;
+
+      // - Then
+      Assert.IsNotNull(result);
+      Assert.AreEqual(404, result.StatusCode);
+    }
+
+    public void GetPhoneBooks_Success()
+    {
+      // - Given
+      var resources = new Resources(false);
+
+      // - When
+      var result = resources.Controller.GetPhoneBooks() as OkObjectResult;
+
+      // - Then
+      Assert.IsNotNull(result);
+      Assert.AreEqual(200,result.StatusCode);
+
+      var phoneBooks = result.Value as List<PhoneBook>;
+      Assert.AreEqual(5,phoneBooks.Count);
+      foreach (var phoneBook in phoneBooks)
+      {
+        Assert.AreEqual(5,phoneBook.Contacts.Count);
+      }
+    }
+
+    // - And so on and so on...
+    // - Each method in controller to have at least one test.
+    // - As many as possible scenarios covered per method...
   }
 }
