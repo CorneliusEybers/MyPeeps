@@ -191,7 +191,6 @@ function DeletePhoneBook(phoneBookId)
 {
   // - Delete it server side...
   // - ToDo: Implement Undo Delete.
-  console.info("phoneBookId: " + phoneBookId);
   $.ajax(
     {
       type: "DELETE",
@@ -202,8 +201,6 @@ function DeletePhoneBook(phoneBookId)
       {
         UndoDeletePhoneBook = result;
         console.info("Undo Delete Phone placed in local variable for undo...");
-        console.info(result);
-        console.info(UndoDeletePhoneBook);
       },
       error: function() 
       {
