@@ -1,17 +1,26 @@
 ﻿// - Required Assemblies
-using System.Collections.Generic;
 
 // - Application Assemblies
+using System.Collections.Generic;
 
-namespace MyPeeps.Ui.Models
+namespace MyPeeps.Services.DataAccess
 {
   public class PhoneBook
   {
     #region properties
 
-    public int PhoneBookId { get; set; }
-    public string  Name { get; set; }
-    public List<Contact> Contacts { get; set; }
+    public int PhoneBookId
+    {
+      get; set;
+    }
+    public string Name
+    {
+      get; set;
+    }
+    public List<Contact> Contacts
+    {
+      get; set;
+    }
 
     #endregion
 
@@ -28,7 +37,7 @@ namespace MyPeeps.Ui.Models
     {
       PhoneBookId = phoneBookId;
       Name = name;
-      Contacts  = contacts;
+      Contacts = contacts;
     }
 
     #endregion

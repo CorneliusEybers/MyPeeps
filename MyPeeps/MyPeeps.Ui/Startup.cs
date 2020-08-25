@@ -19,6 +19,8 @@ namespace MyPeeps
       services.AddMvc();
 
       services.AddSingleton<IPhoneBookRepository, PhoneBookRepositoryMock>();
+
+      services.AddHttpClient();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
