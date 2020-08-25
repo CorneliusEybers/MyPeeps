@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 // - Application Assemblies
 using MyPeeps.Ui.Controllers;
@@ -17,7 +18,17 @@ namespace MyPeeps.Ui.Tests
     {
       #region Properties
 
-      public IPhoneBookRepository PhoneBookRepository { get; set; }
+      /// <summary>
+      /// - This is an instance of the Repository that already have data in it.
+      /// - Setup in the UI project for testing purposes.
+      /// </summary>
+      public IPhoneBookRepository PhoneBookRepositoryMock { get;}
+
+      /// <summary>
+      /// - This is an Empty Moq repository using the Moq Framework.
+      /// - You have to set it up and then use it...
+      /// </summary>
+      public Mock<IPhoneBookRepository> PhoneBookRepositoryMoq { get; }
 
       public PhoneBookController Controller { get; set; }
 
@@ -25,10 +36,21 @@ namespace MyPeeps.Ui.Tests
 
       #region Construct
 
-      public Resources()
+      public Resources(bool moqFrameworkRepository)
       {
-        PhoneBookRepository = new PhoneBookRepositoryMock();
-        Controller = new PhoneBookController(PhoneBookRepository);
+        // - Can use Mock Repository with data
+        // - OR Moq repository that has to be setup and verified.
+        PhoneBookRepositoryMock = new PhoneBookRepositoryMock();
+        PhoneBookRepositoryMoq = new Mock<IPhoneBookRepository>();
+
+        if (moqFrameworkRepository)
+        {
+          Controller = new PhoneBookController(PhoneBookRepositoryMoq.Object);
+        }
+        else
+        {
+          Controller = new PhoneBookController(PhoneBookRepositoryMock);
+        }
       }
 
       #endregion
@@ -38,9 +60,9 @@ namespace MyPeeps.Ui.Tests
     public void GetPhoneBook_Success()
     {
       // - Given
-      var resources = new Resources();
+      var resources = new Resources(false);
       var phoneBookId = 4;
-      var phoneBookExpected = resources.PhoneBookRepository.ReadPhoneBook(phoneBookId);
+      var phoneBookExpected = resources.PhoneBookRepositoryMock.ReadPhoneBook(phoneBookId);
 
       // - When
       var result = resources.Controller.GetPhoneBook(phoneBookId) as OkObjectResult;
@@ -57,6 +79,19 @@ namespace MyPeeps.Ui.Tests
       Assert.AreEqual(phoneBookExpected.Contacts[0].ContactId,phoneBookGot.Contacts[0].ContactId);
       Assert.AreEqual(phoneBookExpected.Contacts[0].Name,phoneBookGot.Contacts[0].Name);
       Assert.AreEqual(phoneBookExpected.Contacts[0].Number,phoneBookGot.Contacts[0].Number);
+    }
+
+    [TestMethod]
+    public void GetPhoneBook_NoContacts()
+    {
+      // - Given
+      //var resources = new Resources();
+
+      //resources.PhoneBookRepository;
+
+      // - When
+
+      // - Then
     }
   }
 }

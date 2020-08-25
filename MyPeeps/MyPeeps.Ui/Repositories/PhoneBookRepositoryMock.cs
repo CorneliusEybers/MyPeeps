@@ -17,6 +17,22 @@ namespace MyPeeps.Ui.Repositories
 
     #endregion
 
+    #region Porperties
+
+    public List<PhoneBook> PhoneBooks
+    {
+      get { return mc_PhoneBooks; }
+      set { mc_PhoneBooks = value; }
+    }
+
+    public List<Contact> Contacts
+    {
+      get { return mc_Contacts; }
+      set { mc_Contacts = value; }
+    }
+
+    #endregion
+
     #region Construct
 
     public PhoneBookRepositoryMock()
