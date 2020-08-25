@@ -49,7 +49,7 @@ namespace MyPeeps.Ui.Repositories
     /// - Primary Key of the PhoneBook added to repository
     /// - -1 on error.
     /// </returns>
-    public bool CreatePhoneBook(PhoneBook phoneBook)
+    public int CreatePhoneBook(PhoneBook phoneBook)
     {
       throw new System.NotImplementedException();
     }
@@ -64,7 +64,7 @@ namespace MyPeeps.Ui.Repositories
     /// - Primary Key of the PhoneBook added to repository
     /// - -1 on error.
     /// </returns>
-    public bool UpdatePhoneBook(PhoneBook phoneBook)
+    public int UpdatePhoneBook(PhoneBook phoneBook)
     {
       throw new System.NotImplementedException();
     }
@@ -83,6 +83,11 @@ namespace MyPeeps.Ui.Repositories
     /// functionality.
     /// </returns>
     public PhoneBook DeletePhoneBook(int phoneBookId)
+    {
+      throw new System.NotImplementedException();
+    }
+
+    public Contact DeleteContact(int contactId)
     {
       throw new System.NotImplementedException();
     }

@@ -13,6 +13,8 @@ namespace MyPeeps.Ui.Repositories
 
     private List<PhoneBook> mc_PhoneBooks;
 
+    private List<Contact> mc_Contacts;
+
     #endregion
 
     #region Construct
@@ -20,6 +22,7 @@ namespace MyPeeps.Ui.Repositories
     public PhoneBookRepositoryMock()
     {
       mc_PhoneBooks = new List<PhoneBook>();
+      mc_Contacts = new List<Contact>();
 
       BuildPhoneBookMock(5);
     }
@@ -35,16 +38,22 @@ namespace MyPeeps.Ui.Repositories
     /// - PhoneBook Object fully loaded to add to repository...
     /// </param>
     /// <returns>
-    /// - True : Success
-    /// - False : Failure
+    /// - Primary Key of the PhoneBook added to repository
+    /// - -1 on error.
     /// </returns>
-    public bool CreatePhoneBook(PhoneBook phoneBook)
+    public int CreatePhoneBook(PhoneBook phoneBook)
     {
-      phoneBook.PhoneBookId = mc_PhoneBooks.Count();
+      phoneBook.PhoneBookId = mc_PhoneBooks.Count < 1 ? 1 : mc_PhoneBooks.Max(PhnBok => PhnBok.PhoneBookId) + 1;
       
       mc_PhoneBooks.Add(phoneBook);
 
-      return true;
+      foreach (var contact in phoneBook.Contacts)
+      {
+        contact.ContactId = mc_Contacts.Count < 1 ? 1 : mc_Contacts.Max(Cnt => Cnt.ContactId) + 1;
+        mc_Contacts.Add(contact);
+      }
+
+      return phoneBook.PhoneBookId;
     }
 
     /// <summary>
@@ -90,7 +99,7 @@ namespace MyPeeps.Ui.Repositories
     /// - True : Success
     /// - False : Failure
     /// </returns>
-    public bool UpdatePhoneBook(PhoneBook phoneBook)
+    public int UpdatePhoneBook(PhoneBook phoneBook)
     {
       var phoneBookExtant = mc_PhoneBooks.First(PhnBok => PhnBok.PhoneBookId == phoneBook.PhoneBookId);
 
@@ -100,7 +109,8 @@ namespace MyPeeps.Ui.Repositories
       {
         if (contact.ContactId < 1)
         {
-          contact.ContactId = phoneBookExtant.Contacts.Count();
+          contact.ContactId = mc_PhoneBooks.Max(PhnBok => PhnBok.PhoneBookId) + 1;
+          mc_Contacts.Add(contact);
           phoneBookExtant.Contacts.Add(contact);
         }
         else
@@ -112,7 +122,7 @@ namespace MyPeeps.Ui.Repositories
         }
       }
       
-      return true;
+      return phoneBook.PhoneBookId;
     }
 
     /// <summary>
@@ -151,9 +161,34 @@ namespace MyPeeps.Ui.Repositories
         phoneBookUndo.Contacts.Add(contactUndo);
       }
 
+      // - Remove the Contacts of the PhoneBook (Cascade delete)
+      foreach (var contact in phoneBook.Contacts)
+      {
+        mc_Contacts.Remove(contact);
+      }
+
       mc_PhoneBooks.Remove(phoneBook);
 
       return phoneBookUndo;
+    }
+
+    public Contact DeleteContact(int contactId)
+    {
+      var contact = mc_Contacts.First(Cnt => Cnt.ContactId == contactId);
+      var phoneBook = mc_PhoneBooks.First(PhnBok => PhnBok.PhoneBookId == contact.PhoneBookId);
+
+      var contactUndo = new Contact()
+                        {
+                          ContactId = -1,
+                          PhoneBookId = phoneBook.PhoneBookId,
+                          Name = contact.Name,
+                          Number = contact.Number
+                        };
+
+      mc_Contacts.Remove(contact);
+      phoneBook.Contacts.Remove(contact);
+
+      return contactUndo;
     }
 
     #endregion
@@ -173,11 +208,12 @@ namespace MyPeeps.Ui.Repositories
         {
           var contact = new Contact();
 
-          contact.ContactId = contactId;
+          contact.ContactId = mc_Contacts.Count < 1 ? 1 : mc_Contacts.Max(Cnt => Cnt.ContactId) + 1;
           contact.PhoneBookId = phoneBookId;
           contact.Name = "Contact" + contactId.ToString("00") + "  Book " + phoneBookId.ToString("00");
           contact.Number = "084" + contactId.ToString("000") + contactId.ToString("0000");
 
+          mc_Contacts.Add(contact);
           phoneBook.Contacts.Add(contact);
         }
 
@@ -185,7 +221,6 @@ namespace MyPeeps.Ui.Repositories
       }
       
     }
-
     #endregion
   }
 }

@@ -16,13 +16,15 @@
 var CurrentPhoneBooks = [];   // - List of all available Phone Books
 var CurrentPhoneBook = {};    // - Details of the Currently selected Phone Book
 var UndoDeletePhoneBook = {}; // - When a phonebook is deleted, keep a copy here for undo.
+var UndoDeleteContact = {};   // - When a contact is deleted, the last deleted is held here for undo purposes...
 var PageUrl = {};             // - Object contains all URL parts that need.
 
 // - JQuery Events
 $(document).ready(PageLoad());
-// - I know about dynamic functions and how they work
-// - When I can I prefer to use function for the sake of 
-//   readability
+// - I know about dynamic functions
+//   and how they work.
+// - When I can, I prefer to use a function 
+//    for the sake of readability
 
 // - Functions Main
 function PageLoad() 
@@ -169,22 +171,15 @@ function PostPhoneBook(phoneBook)
       data: phoneBook,
       success: function (result) 
       {
-        if (!result) 
-        {
-          console.error("Changes to the Phone book not saved successfully...");
-        };
+        // - Refresh the object in the background.
+        // - No need to disturb the user...
+        GetPhoneBooks();
       },
       error: function ()
       {
         console.error("Error in function PostPhoneBook()");
       }
     });
-
-  // - Refresh the object in the background.
-  // - No need to disturb the user...
-  GetPhoneBook();
-  GetPhoneBooks();
-
 }
 
 function DeletePhoneBook(phoneBookId) 
@@ -196,15 +191,39 @@ function DeletePhoneBook(phoneBookId)
       type: "DELETE",
       dataType: "json",
       url:"PhoneBook/DeletePhoneBook/" + phoneBookId,
-      data: phoneBookId,
       success: function(result) 
       {
         UndoDeletePhoneBook = result;
-        console.info("Undo Delete Phone placed in local variable for undo...");
+        console.info("Undo Delete PhoneBook placed in local variable for undo...");
       },
       error: function() 
       {
-        console.error("Error in function DeletePhoneBook...");
+        console.error("Error in function Delete PhoneBook...");
+      }
+    });
+}
+
+function DeleteContact(contactId) 
+{
+  // - Delete server-side...
+  // - ToDo: Implement Undo Delete.
+  console.info(contactId);
+  $.ajax(
+    {
+      type: "DELETE",
+      dataType: "json",
+      url:"PhoneBook/DeleteContact/" + contactId,
+      success: function(result) 
+      {
+        UndoDeleteContact = result;
+        console.info("Undo Delete Contact placed in local variable for undo...");
+
+        console.info(result);
+        console.info(UndoDeleteContact);
+      },
+      error: function() 
+      {
+        console.error("Error in function DeleteContact...");
       }
     });
 }
@@ -463,6 +482,9 @@ function ContactDelete(contactIndex)
   $("#contactname").val(CurrentPhoneBook.contacts[contactIndex].name);
   $("#contactnumber").val(CurrentPhoneBook.contacts[contactIndex].number);
   $("#btncontactsave").attr("onclick", "ContactSave(-1)");
+
+  // - Delete the Contact server-side...
+  DeleteContact(CurrentPhoneBook.contacts[contactIndex].contactId);
 
   // - Remove the Contact from the Contacts
   CurrentPhoneBook.contacts.splice(contactIndex, 1);

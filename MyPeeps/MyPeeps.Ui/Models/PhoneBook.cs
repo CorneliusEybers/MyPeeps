@@ -4,7 +4,6 @@ using System.Collections.Generic;
 // - Application Assemblies
 
 
-
 namespace MyPeeps.Ui.Models
 {
   public class PhoneBook

@@ -39,7 +39,7 @@ namespace MyPeeps.Ui.Repositories
     /// - Primary Key of the PhoneBook added to repository
     /// - -1 on error.
     /// </returns>
-    bool CreatePhoneBook(PhoneBook phoneBook);
+    int CreatePhoneBook(PhoneBook phoneBook);
 
     /// <summary>
     /// - Update the PhoneBook received in the repository.
@@ -48,15 +48,15 @@ namespace MyPeeps.Ui.Repositories
     /// - PhoneBook Object fully loaded to add to repository...
     /// </param>
     /// <returns>
-    /// - Primary Key of the PhoneBook added to repository
+    /// - Primary Key of the PhoneBook updated in repository
     /// - -1 on error.
     /// </returns>
-    bool UpdatePhoneBook(PhoneBook phoneBook);
+    int UpdatePhoneBook(PhoneBook phoneBook);
 
     /// <summary>
     /// - Delete the PhoneBook of the ID from the repository
     /// - Retrieve the PhoneBook before it is deleted.
-    /// - Pass it bak to the subscriber to offer unto
+    /// - Pass it back to the subscriber to offer unto
     ///   delete by re-save again
     /// </summary>
     /// <param name="phoneBookId">
@@ -67,5 +67,17 @@ namespace MyPeeps.Ui.Repositories
     /// functionality.
     /// </returns>
     PhoneBook DeletePhoneBook(int phoneBookId);
+
+    /// <summary>
+    /// - Delete the Contact specified form its PhoneBook.
+    /// - Retrieve the Contact before it is deleted.
+    /// - Pass it back to the subscriber to offer unto
+    ///   delete by re-save again
+    /// </summary>
+    /// <param name="contactId">
+    /// - Primary Key of Contact Object to be deleted.
+    /// </param>
+    /// <returns></returns>
+    Contact DeleteContact(int contactId);
   }
 }

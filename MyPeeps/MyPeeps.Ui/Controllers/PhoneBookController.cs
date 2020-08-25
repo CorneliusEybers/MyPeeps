@@ -54,18 +54,23 @@ namespace MyPeeps.Ui.Controllers
     [Route("PhoneBook/PostPhoneBook")]
     public IActionResult PostPhoneBook(PhoneBook phoneBook)
     {
-      bool success = false;
+      int phoneBookId = -1;
 
       if (phoneBook.PhoneBookId < 1)
       {
-        success = mc_PhoneBookRespository.CreatePhoneBook(phoneBook);
+        phoneBookId = mc_PhoneBookRespository.CreatePhoneBook(phoneBook);
       }
       else
       {
-        success =  mc_PhoneBookRespository.UpdatePhoneBook(phoneBook);
+        phoneBookId =  mc_PhoneBookRespository.UpdatePhoneBook(phoneBook);
       }
 
-      return Ok(success);
+      if (phoneBookId < 1)
+      {
+        return NotFound();
+      }
+
+      return Ok(phoneBookId);
     }
 
     [HttpDelete]
@@ -73,7 +78,26 @@ namespace MyPeeps.Ui.Controllers
     public IActionResult DeletePhoneBook(int phoneBookId)
     {
       var contactUndo = mc_PhoneBookRespository.DeletePhoneBook(phoneBookId);
-      
+
+      if (contactUndo == null)
+      {
+        return NotFound();
+      }
+
+      return Ok(contactUndo);
+    }
+
+    [HttpDelete]
+    [Route("PhoneBook/DeleteContact/{contactId}")]
+    public IActionResult DeleteContact(int contactId)
+    {
+      var contactUndo = mc_PhoneBookRespository.DeleteContact(contactId);
+
+      if (contactUndo == null)
+      {
+        return NotFound();
+      }
+
       return Ok(contactUndo);
     }
 
