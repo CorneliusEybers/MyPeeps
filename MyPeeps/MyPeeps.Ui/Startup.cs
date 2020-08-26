@@ -18,7 +18,10 @@ namespace MyPeeps
     {
       services.AddMvc();
 
+      // - Switch the Repository here...
+      //   to work from Mock Repository or Service Repository
       services.AddSingleton<IPhoneBookRepository, PhoneBookRepositoryMock>();
+      //services.AddSingleton<IPhoneBookRepository, PhoneBookRepositoryToService>();
 
       services.AddHttpClient();
     }
@@ -38,7 +41,7 @@ namespace MyPeeps
 
       // - MVC
       applicationBuilder.UseRouting();
-      applicationBuilder.UseEndpoints(endpoints => { endpoints.MapControllerRoute("default", "{controller=PhoneBook}/{action=GetPhoneBook}/{phoneBookId?}"); });
+      applicationBuilder.UseEndpoints(endpoints => { endpoints.MapControllerRoute("default", "{controller=PhoneBook}/{action=GetPhoneBooks}"); });
 
     }
   }

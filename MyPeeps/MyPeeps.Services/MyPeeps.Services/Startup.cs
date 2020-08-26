@@ -26,7 +26,7 @@ namespace MyPeeps.Services
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyPeepsConnection")));
+      services.AddDbContext<MyPeepsDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyPeepsConnection")));
       services.AddControllers();
     }
 
@@ -39,13 +39,7 @@ namespace MyPeeps.Services
       }
 
       app.UseRouting();
-
-      app.UseAuthorization();
-
-      app.UseEndpoints(endpoints =>
-      {
-        endpoints.MapControllers();
-      });
+      app.UseEndpoints(endpoints => { endpoints.MapControllerRoute("default","{controller=PhoneBook}/{action=GetPhoneBooks}"); });
     }
   }
 }

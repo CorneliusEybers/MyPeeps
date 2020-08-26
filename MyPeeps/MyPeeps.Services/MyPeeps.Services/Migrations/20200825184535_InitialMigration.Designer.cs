@@ -8,7 +8,7 @@ using MyPeeps.Services.DataAccess;
 
 namespace MyPeeps.Services.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(MyPeepsDbContext))]
     [Migration("20200825184535_InitialMigration")]
     partial class InitialMigration
     {

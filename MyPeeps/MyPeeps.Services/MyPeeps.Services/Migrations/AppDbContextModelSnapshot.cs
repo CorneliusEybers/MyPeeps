@@ -7,7 +7,7 @@ using MyPeeps.Services.DataAccess;
 
 namespace MyPeeps.Services.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(MyPeepsDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
