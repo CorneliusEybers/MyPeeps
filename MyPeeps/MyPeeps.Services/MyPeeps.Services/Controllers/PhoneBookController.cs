@@ -12,7 +12,7 @@ using MyPeeps.Services.DataAccess;
 
 namespace MyPeeps.Services.Controllers
 {
-  [ApiController]
+  [ApiController]   // - Auto Model Binding. No need for [FromBody]
   public class PhoneBookController : ControllerBase
   {
     #region ClassVariables
@@ -83,6 +83,11 @@ namespace MyPeeps.Services.Controllers
       {
         int phoneBookId = -1;
 
+        if (phoneBook == null)
+        {
+          return BadRequest("Phone Book to create not specified...");
+        }
+
         mc_MyPeepsDbContext.PhoneBooks.Add(phoneBook);
 
         await mc_MyPeepsDbContext.SaveChangesAsync();
@@ -110,11 +115,16 @@ namespace MyPeeps.Services.Controllers
       {
         int phoneBookId = -1;
 
+        if (phoneBook == null)
+        {
+          return BadRequest("Phone Book to be updated was not specified.");
+        }
+
         var phoneBookExtant = await mc_MyPeepsDbContext.PhoneBooks.Include(PhnBok => PhnBok.Contacts).FirstOrDefaultAsync(PhnBok => PhnBok.PhoneBookId == phoneBook.PhoneBookId);
 
         if (phoneBookExtant == null)
         {
-          return NotFound();
+          return BadRequest("Phone Book to be updated was not found on the database...");
         }
 
         // - Pass back the Primary Key of the Updated PhoneBook.
@@ -158,7 +168,7 @@ namespace MyPeeps.Services.Controllers
           }
         }
 
-        mc_MyPeepsDbContext.SaveChanges();
+        await mc_MyPeepsDbContext.SaveChangesAsync();
 
         return Ok(phoneBookId);
       }
@@ -181,7 +191,7 @@ namespace MyPeeps.Services.Controllers
 
         if (phoneBookDelete == null)
         {
-          return NotFound();
+          return NotFound("PhoneBook to Delete not found on the database... ");
         }
 
         // - Create a new object with the same values.
@@ -201,7 +211,7 @@ namespace MyPeeps.Services.Controllers
         }
 
         mc_MyPeepsDbContext.PhoneBooks.Remove(phoneBookDelete);
-        mc_MyPeepsDbContext.SaveChanges();
+        await mc_MyPeepsDbContext.SaveChangesAsync();
 
         return Ok(phoneBookUndo);
 
@@ -225,7 +235,7 @@ namespace MyPeeps.Services.Controllers
 
         if (contactDelete == null)
         {
-          NotFound();
+          NotFound("Contact to delete not found on database...");
         }
 
         // - Build the undo Contact for the return
@@ -236,7 +246,7 @@ namespace MyPeeps.Services.Controllers
 
         // - Get it done...
         mc_MyPeepsDbContext.Contacts.Remove(contactDelete);
-        mc_MyPeepsDbContext.SaveChanges();
+        await mc_MyPeepsDbContext.SaveChangesAsync();
 
         // - Zero error point
         return Ok(contactUndo);
