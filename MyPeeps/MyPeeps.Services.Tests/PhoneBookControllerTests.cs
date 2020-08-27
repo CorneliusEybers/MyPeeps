@@ -69,6 +69,8 @@ namespace MyPeeps.Services.Tests
   [TestClass]
   public class PhoneBookControllerTests
   {
+    #region TestMethods
+
     [TestMethod]
     public void TestMethodPutPhoneBook_Success()
     {
@@ -76,50 +78,61 @@ namespace MyPeeps.Services.Tests
       var resources = new Resources();
 
       // - Given
-      var phoneBook = new PhoneBook()
-                      {
-                        PhoneBookId = 3,
-                        Name        = "PhoneBook3",
-                        Contacts = new List<Contact>()
-                                   {
-                                     new Contact()
-                                     {
-                                       ContactId   = 7,
-                                       Name        = "Contact7 Test",
-                                       Number      = "77",
-                                       PhoneBookId = 3
-                                     },
-                                     new Contact()
-                                     {
-                                       ContactId   = 8,
-                                       Name        = "Contact8 Test",
-                                       Number      = "887",
-                                       PhoneBookId = 3
-                                     },
-                                     new Contact()
-                                     {
-                                       ContactId   = 9,
-                                       Name        = "Contact9 Test",
-                                       Number      = "99",
-                                       PhoneBookId = 3
-                                     },
-                                     new Contact()
-                                     {
-                                       ContactId   = -23,
-                                       Name        = "Contact20 New",
-                                       Number      = "29",
-                                       PhoneBookId = 3
-                                     }
-                                   }
-                      };
+      var phoneBook = CreateTestPhoneBook();
 
       // - When
-      //var result = resources.Controller.PutPhoneBook(phoneBook);
-      // - Under construction...
+      var result = resources.Controller.PutPhoneBook(phoneBook);
 
       // - Then
 
-
     }
+
+    #endregion
+
+    #region TestSetupMethods
+
+    private PhoneBook CreateTestPhoneBook()
+    {
+      var phoneBook = new PhoneBook()
+      {
+        PhoneBookId = 3,
+        Name        = "PhoneBook3",
+        Contacts = new List<Contact>()
+                 {
+                   new Contact()
+                   {
+                     ContactId   = 7,
+                     Name        = "Contact7 Test",
+                     Number      = "77",
+                     PhoneBookId = 3
+                   },
+                   new Contact()
+                   {
+                     ContactId   = 8,
+                     Name        = "Contact8 Test",
+                     Number      = "887",
+                     PhoneBookId = 3
+                   },
+                   new Contact()
+                   {
+                     ContactId   = 9,
+                     Name        = "Contact9 Test",
+                     Number      = "99",
+                     PhoneBookId = 3
+                   },
+                   new Contact()
+                   {
+                     ContactId   = -23,
+                     Name        = "Contact20 New",
+                     Number      = "29",
+                     PhoneBookId = 3
+                   }
+                 }
+      };
+
+      return phoneBook;
+    }
+
+    #endregion
   }
 }

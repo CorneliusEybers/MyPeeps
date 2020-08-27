@@ -88,11 +88,25 @@ namespace MyPeeps.Services.Controllers
           return BadRequest("Phone Book to create not specified...");
         }
 
-        mc_MyPeepsDbContext.PhoneBooks.Add(phoneBook);
+        // - NEVER trust the subscriber... not even if you ARE the subscriber!!!
+        var phoneBookCreated = new PhoneBook();
+
+        phoneBookCreated.Name = phoneBook.Name;
+
+        foreach (var contact in phoneBook.Contacts)
+        {
+          var contactCreated = new Contact();
+
+          contactCreated.Name = contact.Name;
+          contactCreated.Number = contact.Number;
+          phoneBookCreated.Contacts.Add(contactCreated);
+        }
+
+        mc_MyPeepsDbContext.PhoneBooks.Add(phoneBookCreated);
 
         await mc_MyPeepsDbContext.SaveChangesAsync();
 
-        phoneBookId = phoneBook.PhoneBookId;
+        phoneBookId = phoneBookCreated.PhoneBookId;
 
         return Ok(phoneBookId);
       }
